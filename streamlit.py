@@ -1,8 +1,20 @@
 import streamlit as st
 import pandas as pd
-import plotly.express as px
+import matplotlib.pyplot as plt
+import seaborn as sns
 
+st.set_page_config(layout="wide")
 st.title("ChronoGraph")
+
+# Sidebar instructions
+st.sidebar.title("Instructions")
+st.sidebar.info(
+    """
+    1. Upload a CSV file containing your time data.
+    2. Ensure the file has 'Date' and 'Time (hours)' columns.
+    3. View the table and the colorful graph.
+    """
+)
 
 # File uploader to allow the user to upload a CSV file
 uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
@@ -14,33 +26,36 @@ if uploaded_file is not None:
     # Check if the necessary columns are present in the CSV file
     if 'Date' in df.columns and 'Time (hours)' in df.columns:
         st.write("### Time Entries")
-        st.write(df)
+        st.dataframe(df, width=1000, height=300)
 
-        # Plot the 3D scatter plot
+        # Plot the colorful line and bar graph
         if len(df) > 1:
-            fig = px.scatter_3d(
-                df, x='Date', y='Time (hours)', z='Time (hours)',
-                title='3D Time Line Graph',
-                labels={'Date': 'Date', 'Time (hours)': 'Time (hours)'}
-            )
-
-            # Format dates for better readability
-            fig.update_layout(scene=dict(
-                xaxis=dict(title='Date', tickformat='%Y-%m-%d'),
-                yaxis=dict(title='Time (hours)'),
-                zaxis=dict(title='Time (hours)')
-            ))
+            sns.set(style="whitegrid")
             
-            # Display the plot
-            st.plotly_chart(fig, use_container_width=True)
+            fig, ax = plt.subplots(figsize=(12, 6))
+            
+            # Plot bars
+            sns.barplot(x="Date", y="Time (hours)", data=df, palette="pastel", ax=ax)
+            
+            # Plot line
+            sns.lineplot(x="Date", y="Time (hours)", data=df, marker='o', color='blue', ax=ax, label='Line')
+
+            ax.set_xlabel("Date", fontsize=14)
+            ax.set_ylabel("Time (hours)", fontsize=14)
+            ax.set_title("Time Line and Bar Graph", fontsize=16)
+            
+            # Set x-axis ticks to only the given dates
+            ax.set_xticks(df["Date"])
+            ax.set_xticklabels(df["Date"].dt.strftime("%Y-%m-%d"), rotation=45, ha='right')
+            
+            fig.tight_layout()
+            st.pyplot(fig)
         else:
             st.write("The CSV file must contain more than one entry to plot the graph.")
     else:
         st.write("The CSV file must contain 'Date' and 'Time (hours)' columns.")
 else:
     st.write("Please upload a CSV file.")
-
-
 
 
 
