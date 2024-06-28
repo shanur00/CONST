@@ -1,20 +1,8 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
-import seaborn as sns
 
-st.set_page_config(layout="wide")
 st.title("ChronoGraph")
-
-# Sidebar instructions
-st.sidebar.title("Instructions")
-st.sidebar.info(
-    """
-    1. Upload a CSV file containing your time data.
-    2. Ensure the file has 'Date' and 'Time (hours)' columns.
-    3. View the table and the colorful graph.
-    """
-)
 
 # File uploader to allow the user to upload a CSV file
 uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
@@ -26,28 +14,24 @@ if uploaded_file is not None:
     # Check if the necessary columns are present in the CSV file
     if 'Date' in df.columns and 'Time (hours)' in df.columns:
         st.write("### Time Entries")
-        st.dataframe(df, width=1000, height=300)
+        st.write(df)
 
-        # Plot the colorful line and bar graph
+        # Plot the line graph and bar chart
         if len(df) > 1:
-            sns.set(style="whitegrid")
-            
             fig, ax = plt.subplots(figsize=(12, 6))
-            
-            # Plot bars
-            sns.barplot(x="Date", y="Time (hours)", data=df, palette="pastel", ax=ax)
-            
-            # Plot line
-            sns.lineplot(x="Date", y="Time (hours)", data=df, marker='o', color='blue', ax=ax, label='Line')
-
+            ax.bar(df["Date"], df["Time (hours)"], color='skyblue', alpha=0.7, label='Bar Chart')
+            ax.plot(df["Date"], df["Time (hours)"], marker='o', color='red', label='Line Graph')
             ax.set_xlabel("Date", fontsize=14)
             ax.set_ylabel("Time (hours)", fontsize=14)
             ax.set_title("Time Line and Bar Graph", fontsize=16)
             
             # Set x-axis ticks to only the given dates
             ax.set_xticks(df["Date"])
-            ax.set_xticklabels(df["Date"].dt.strftime("%Y-%m-%d"), rotation=45, ha='right')
+            ax.set_xticklabels(df["Date"].dt.strftime("%Y-%m-%d"), rotation=45, ha='right')  # Format dates as strings
+
+            ax.legend()
             
+            # Adjust layout for better readability
             fig.tight_layout()
             st.pyplot(fig)
         else:
@@ -56,6 +40,7 @@ if uploaded_file is not None:
         st.write("The CSV file must contain 'Date' and 'Time (hours)' columns.")
 else:
     st.write("Please upload a CSV file.")
+
 
 
 
