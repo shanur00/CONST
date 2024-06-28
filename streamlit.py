@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
-st.title("Time Input Line Graph from CSV File")
+st.title("ChronoGraph")
 
 # File uploader to allow the user to upload a CSV file
 uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
