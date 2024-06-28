@@ -16,7 +16,7 @@ if 'dates' not in st.session_state:
 # Function to read CSV file
 def read_csv():
     if os.path.exists(csv_file):
-        df = pd.read_csv(csv_file, parse_dates=['Date'])
+        df = pd.read_csv(csv_file, parse_dates=['Date'], date_parser=lambda x: pd.to_datetime(x, format='%Y-%m-%d'))
         return df
     return pd.DataFrame(columns=['Date', 'Time (hours)'])
 
@@ -30,7 +30,7 @@ df = read_csv()
 # Initialize session state with existing data
 if len(df) > 0:
     st.session_state.dates = df['Date'].tolist()
-    st.session_state.times = pd.to_datetime(df['Date']).dt.time.tolist()
+    st.session_state.times = [datetime.datetime.strptime(t, '%H:%M:%S').time() for t in df['Time (hours)'].apply(lambda x: f"{int(x):02d}:{int((x*60)%60):02d}:{int((x*3600)%60):02d}").tolist()]
 
 st.title("Time Input Line Graph")
 
