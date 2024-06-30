@@ -27,6 +27,10 @@ def plot_graphs(df):
         sns.barplot(x="Date", y="Time (hours)", data=df, ax=ax1, color='#69b3a2', alpha=0.7)
         ax1.set_ylabel("Time (hours)")
         ax1.set_title("Time Data Visualization")
+        ax1.spines['bottom'].set_color('darkgray')
+        ax1.spines['top'].set_color('darkgray')
+        ax1.spines['right'].set_color('darkgray')
+        ax1.spines['left'].set_color('darkgray')
 
         # Plotting the line graph using Matplotlib
         line = ax2.plot(df["Date"], df["Time (hours)"], marker='o', color='red', label='Line Graph')
@@ -34,6 +38,10 @@ def plot_graphs(df):
         ax2.set_xlabel("Date")
         ax2.set_ylabel("Time (hours)")
         ax2.legend()
+        ax2.spines['bottom'].set_color('darkgray')
+        ax2.spines['top'].set_color('darkgray')
+        ax2.spines['right'].set_color('darkgray')
+        ax2.spines['left'].set_color('darkgray')
 
         # Formatting x-axis dates
         ax2.set_xticks(df["Date"])
@@ -107,6 +115,7 @@ elif st.button("Use Sample Data"):
 
 else:
     st.write("Please upload a CSV file or use sample data.")
+
 
 
 
