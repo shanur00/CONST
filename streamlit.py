@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Set the Streamlit layout to wide mode
-st.set_page_config(layout="wide")
+st.set_page_config(layout="default")
 
 # Function to plot graphs
 def plot_graphs(df):
