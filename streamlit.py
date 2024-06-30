@@ -4,29 +4,39 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Set the Streamlit layout to wide mode
-#st.set_page_config(layout="default")
+# st.set_page_config(layout="default")
 
 # Function to plot graphs
 def plot_graphs(df):
     if len(df) > 1:
+        # Convert 'Date' column to string for proper plotting
+        df['Date'] = df['Date'].dt.strftime('%Y-%m-%d')
+        
+        # Calculate the average time
+        avg_time = df["Time (hours)"].mean()
+
         # Create figure and axes
         fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 10), sharex=True)
 
-        # Plotting the bar chart
-        ax1.bar(df["Date"], df["Time (hours)"], color='skyblue', alpha=0.7, label='Bar Chart')
+         # Set background color for the axes
+        ax1.set_facecolor('#faf4ed')
+        ax2.set_facecolor('#faf4ed')
+
+        # Plotting the bar chart using Seaborn
+        sns.barplot(x="Date", y="Time (hours)", data=df, ax=ax1, color='#69b3a2', alpha=0.7)
         ax1.set_ylabel("Time (hours)")
         ax1.set_title("Time Data Visualization")
-        ax1.legend()
 
-        # Plotting the line graph
+        # Plotting the line graph using Matplotlib
         ax2.plot(df["Date"], df["Time (hours)"], marker='o', color='red', label='Line Graph')
+        ax2.axhline(y=avg_time, color='green', linestyle='-', label='Average Time')
         ax2.set_xlabel("Date")
         ax2.set_ylabel("Time (hours)")
         ax2.legend()
 
         # Formatting x-axis dates
         ax2.set_xticks(df["Date"])
-        ax2.set_xticklabels(df["Date"].dt.strftime("%Y-%m-%d"), rotation=45, ha='right')
+        ax2.set_xticklabels(df["Date"], rotation=45, ha='right')
 
         # Adjust layout
         fig.tight_layout()
