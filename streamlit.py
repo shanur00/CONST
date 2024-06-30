@@ -29,7 +29,7 @@ def plot_graphs(df):
         ax1.set_title("Time Data Visualization")
 
         # Plotting the line graph using Matplotlib
-        ax2.plot(df["Date"], df["Time (hours)"], marker='o', color='red', label='Line Graph')
+        line = ax2.plot(df["Date"], df["Time (hours)"], marker='o', color='red', label='Line Graph')
         ax2.axhline(y=avg_time, color='green', linestyle='-', label='Average Time')
         ax2.set_xlabel("Date")
         ax2.set_ylabel("Time (hours)")
@@ -107,7 +107,6 @@ elif st.button("Use Sample Data"):
 
 else:
     st.write("Please upload a CSV file or use sample data.")
-
 
 
 # import streamlit as st
